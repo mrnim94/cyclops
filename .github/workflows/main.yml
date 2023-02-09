@@ -12,7 +12,8 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os: [windows-2019, windows-2022]
+#        os: [windows-2019, windows-2022]
+        os: [windows-2019]
         include:
           - os: windows-2019
             base: nanoserver-1809
