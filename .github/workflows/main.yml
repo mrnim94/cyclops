@@ -17,9 +17,9 @@ jobs:
           - os: windows-2019
             base: nanoserver-1809
             file: Dockerfile
-          - os: windows-2022
-            base: nanoserver-ltsc2022
-            file: Dockerfile
+#          - os: windows-2022
+#            base: nanoserver-ltsc2022
+#            file: Dockerfile
     steps:
       - name: Checkout
         uses: actions/checkout@v2
