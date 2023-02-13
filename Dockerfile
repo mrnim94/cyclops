@@ -1,5 +1,5 @@
 # Use the Golang Windows Server Core image as the base image
-FROM golang:windowsservercore-ltsc2022
+FROM golang:1.20.0-windowsservercore-1809
 
 # Set the working directory
 WORKDIR /app
