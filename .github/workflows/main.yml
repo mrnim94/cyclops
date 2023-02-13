@@ -2,9 +2,9 @@ name: CI Workflow
 #https://www.phillipsj.net/posts/building-windows-and-linux-containers-with-github-actions/
 
 on:
-  push:
-    branches:
-      - "master"
+  release:
+    types:
+      - published
 
 jobs:
   build-containers:
