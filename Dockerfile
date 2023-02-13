@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Build the Go application
-go build -o main.exe .
+RUN go build -o main.exe .
 
 # Set the entrypoint to the executable
 ENTRYPOINT [".\main.exe"]
