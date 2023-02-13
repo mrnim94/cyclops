@@ -11,4 +11,4 @@ COPY . .
 RUN go build -o main.exe .
 
 # Set the entrypoint to the executable
-ENTRYPOINT [".\main.exe"]
+ENTRYPOINT .\main.exe
