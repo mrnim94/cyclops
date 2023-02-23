@@ -13,6 +13,5 @@ WORKDIR $GOPATH/src/cyclops
 COPY . .
 
 RUN go mod download
-WORKDIR server
 RUN GOOS=linux go build -o app
 ENTRYPOINT ["./app"]
