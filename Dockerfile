@@ -1,14 +1,18 @@
-# Use the Golang Windows Server Core image as the base image
-FROM golang:1.20.1-windowsservercore-1809
+FROM golang:1.20-alpine
 
-# Set the working directory
-WORKDIR /app
+RUN apk update && apk add git
 
-# Copy the source code into the container
+ENV CGO_ENABLED=0
+ENV GO111MODULE=on
+
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+WORKDIR $GOPATH/src/cyclops
+
 COPY . .
 
-# Build the Go application
-RUN go build -o main.exe .
-
-# Set the entrypoint to the executable
-ENTRYPOINT .\main.exe
+RUN go mod download
+WORKDIR server
+RUN GOOS=linux go build -o app
+ENTRYPOINT ["./app"]
