@@ -3,7 +3,7 @@ package log
 import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"io"
 	"os"
 	"runtime"
@@ -47,7 +47,7 @@ func InitLogger(forTest bool) *MyLogger {
 	if runtime.GOOS == "windows" {
 		logPath = "./log_files/"
 	} else {
-		logPath = "../../log_files/"
+		logPath = "./log_files/"
 	}
 
 	Log = logrus.New()
