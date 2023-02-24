@@ -5,7 +5,6 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"os"
 	"path/filepath"
-	"sync"
 )
 
 func init() {
@@ -35,13 +34,14 @@ func main() {
 	// Watch the specified directory and all subdirectories.
 	err = filepath.Walk(cyclops, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			log.Error(err)
+			// Ignore "no such file or directory" errors
+			if os.IsNotExist(err) {
+				log.Error("Ignored ", err)
+				return nil
+			}
+			log.Error("Error accessing file or directory:", err)
 			return err
 		}
-		var mutex = &sync.Mutex{}
-
-		mutex.Lock()
-		defer mutex.Unlock()
 
 		if info.IsDir() {
 			err := watcher.Add(path)
