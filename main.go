@@ -2,10 +2,10 @@ package main
 
 import (
 	"cyclops/log"
-	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"os"
 	"path/filepath"
+	"sync"
 )
 
 func init() {
@@ -35,19 +35,29 @@ func main() {
 	// Watch the specified directory and all subdirectories.
 	err = filepath.Walk(cyclops, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			fmt.Println("Error:", err)
+			log.Error(err)
 			return err
 		}
+		var mutex = &sync.Mutex{}
+
+		mutex.Lock()
+		defer mutex.Unlock()
 
 		if info.IsDir() {
 			err := watcher.Add(path)
 			if err != nil {
-				fmt.Println("Error:", err)
+				log.Error(err)
 			}
+			log.Info("Found Directory:", path)
+		} else {
+			log.Info("Found file:", path)
 		}
 
 		return nil
 	})
+	if err != nil {
+		log.Error("Error walking directory:", err)
+	}
 
 	// Start listening for events.
 	go func() {
