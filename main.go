@@ -70,8 +70,6 @@ func watchDir(path string, fi os.FileInfo, err error) error {
 	// to be added to each nested directory
 	if fi.Mode().IsDir() {
 		return watcher.Add(path)
-	} else {
-		log.Error("")
 	}
 
 	return nil
