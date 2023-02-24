@@ -3,10 +3,9 @@ package main
 import (
 	"cyclops/log"
 	"fmt"
+	"github.com/fsnotify/fsnotify"
 	"os"
 	"path/filepath"
-
-	"github.com/fsnotify/fsnotify"
 )
 
 func init() {
@@ -15,8 +14,6 @@ func init() {
 	os.Setenv("TZ", "Asia/Ho_Chi_Minh")
 
 }
-
-var watcher *fsnotify.Watcher
 
 // main
 func main() {
@@ -29,48 +26,50 @@ func main() {
 		log.Info("Cyclops look at path ", cyclops)
 	}
 	// creates a new file watcher
-	watcher, _ = fsnotify.NewWatcher()
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer watcher.Close()
 
-	// starting at the root of the project, walk each file/directory searching for
-	// directories
-	if err := filepath.Walk(cyclops, watchDir); err != nil {
-		fmt.Println("ERROR", err)
-	}
+	// Watch the specified directory and all subdirectories.
+	err = filepath.Walk(cyclops, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			fmt.Println("Error:", err)
+			return err
+		}
 
-	//
-	done := make(chan bool)
+		if info.IsDir() {
+			err := watcher.Add(path)
+			if err != nil {
+				fmt.Println("Error:", err)
+			}
+		}
 
-	//
+		return nil
+	})
+
+	// Start listening for events.
 	go func() {
 		for {
 			select {
-			// watch for events
-			case event := <-watcher.Events:
-				log.Info("EVENT! ", event)
-
-				// watch for errors
-			case err := <-watcher.Errors:
-				log.Error("ERROR", err)
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				log.Info("event:", event)
+				if event.Has(fsnotify.Write) {
+					log.Info("modified file:", event.Name)
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				log.Error("error:", err)
 			}
 		}
 	}()
 
-	<-done
-}
-
-// watchDir gets run as a walk func, searching for directories to add watchers to
-func watchDir(path string, fi os.FileInfo, err error) error {
-	if err != nil {
-		log.Error(err)
-		return nil
-	}
-
-	// since fsnotify can watch all the files in a directory, watchers only need
-	// to be added to each nested directory
-	if fi.Mode().IsDir() {
-		return watcher.Add(path)
-	}
-
-	return nil
+	// Block main goroutine forever.
+	<-make(chan struct{})
 }
