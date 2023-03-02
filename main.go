@@ -2,6 +2,7 @@ package main
 
 import (
 	"cyclops/log"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -33,7 +34,7 @@ func main() {
 
 	// starting at the root of the project, walk each file/directory searching for
 	// directories
-	if err := filepath.Walk(cyclops, watchDir); err != nil {
+	if err := filepath.WalkDir(cyclops, watchDir); err != nil {
 		log.Error("Error walking directory:", err)
 	}
 
@@ -63,7 +64,7 @@ func main() {
 }
 
 // watchDir gets run as a walk func, searching for directories to add watchers to
-func watchDir(path string, fi os.FileInfo, err error) error {
+func watchDir(path string, fi fs.DirEntry, err error) error {
 	if err != nil {
 		// Ignore "no such file or directory" errors
 		if os.IsNotExist(err) {

@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/avast/retry-go/v4 v4.3.3 // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f // indirect
 	github.com/lestrrat/go-strftime v0.0.0-20180220042222-ba3bf9c1d042 // indirect
