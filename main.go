@@ -40,17 +40,6 @@ func main() {
 	//	log.Error("Error walking directory:", err)
 	//}
 
-	watchDirectories := strings.Split(cyclops, ",")
-
-	for _, watchDirectory := range watchDirectories {
-		log.Info("Cyclops look at path ", watchDirectory)
-		// Add a path.
-		err := watcher.Add(watchDirectory)
-		if err != nil {
-			log.Fatal("Add folder", watchDirectory, " to watch is error --> ", err)
-		}
-	}
-
 	// Start listening for events.
 	go func() {
 		for {
@@ -60,7 +49,7 @@ func main() {
 					return
 				}
 				log.Info("event:", event)
-				if event.Has(fsnotify.Write) {
+				if event.Op&fsnotify.Write == fsnotify.Write {
 					log.Info("modified file:", event.Name)
 				}
 			case err, ok := <-watcher.Errors:
@@ -71,6 +60,16 @@ func main() {
 			}
 		}
 	}()
+
+	watchDirectories := strings.Split(cyclops, ",")
+	for _, watchDirectory := range watchDirectories {
+		log.Info("Cyclops look at path ", watchDirectory)
+		// Add a path.
+		err := watcher.Add(watchDirectory)
+		if err != nil {
+			log.Fatal("Add folder", watchDirectory, " to watch is error --> ", err)
+		}
+	}
 
 	// Block main goroutine forever.
 	<-make(chan struct{})
