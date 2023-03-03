@@ -2,11 +2,10 @@ package main
 
 import (
 	"cyclops/log"
+	"github.com/fsnotify/fsnotify"
 	"io/fs"
 	"os"
-	"path/filepath"
-
-	"github.com/fsnotify/fsnotify"
+	"strings"
 )
 
 func init() {
@@ -24,7 +23,7 @@ func main() {
 	// Checking that an environment variable is present or not.
 	cyclops, ok := os.LookupEnv("LOOK_PATH")
 	if !ok {
-		cyclops = "/Users/mrnim/GolandProjects/cyclops/nim"
+		cyclops = "/Users/mrnim/GolandProjects/cyclops/nim,/Users/mrnim/GolandProjects/cyclops/nim/chirldren"
 	} else {
 		log.Info("Cyclops look at path ", cyclops)
 	}
@@ -34,8 +33,18 @@ func main() {
 
 	// starting at the root of the project, walk each file/directory searching for
 	// directories
-	if err := filepath.WalkDir(cyclops, watchDir); err != nil {
-		log.Error("Error walking directory:", err)
+	//if err := filepath.WalkDir(cyclops, watchDir); err != nil {
+	//	log.Error("Error walking directory:", err)
+	//}
+
+	watchDirectories := strings.Split(cyclops, ",")
+
+	for _, watchDirectory := range watchDirectories {
+		// Add a path.
+		err := watcher.Add(watchDirectory)
+		if err != nil {
+			log.Fatal("Add folder", watchDirectory, " to watch is error --> ", err)
+		}
 	}
 
 	// Start listening for events.
