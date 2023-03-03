@@ -46,6 +46,7 @@ func main() {
 			select {
 			case event, ok := <-watcher.Events:
 				if !ok {
+					log.Info("channel closed")
 					return
 				}
 				log.Info("event:", event)
@@ -54,6 +55,7 @@ func main() {
 				}
 			case err, ok := <-watcher.Errors:
 				if !ok {
+					log.Info("channel closed")
 					return
 				}
 				log.Error("error:", err)
@@ -63,11 +65,12 @@ func main() {
 
 	watchDirectories := strings.Split(cyclops, ",")
 	for _, watchDirectory := range watchDirectories {
-		log.Info("Cyclops look at path ", watchDirectory)
 		// Add a path.
 		err := watcher.Add(watchDirectory)
 		if err != nil {
 			log.Fatal("Add folder", watchDirectory, " to watch is error --> ", err)
+		} else {
+			log.Info("Cyclops look at path ", watchDirectory)
 		}
 	}
 
