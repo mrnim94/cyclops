@@ -25,10 +25,13 @@ func main() {
 	if !ok {
 		cyclops = "/Users/mrnim/GolandProjects/cyclops/nim,/Users/mrnim/GolandProjects/cyclops/nim/chirldren"
 	} else {
-		log.Info("Cyclops look at path ", cyclops)
+		log.Info("Cyclops look at paths ", cyclops)
 	}
 	// creates a new file watcher
-	watcher, _ = fsnotify.NewWatcher()
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Error(err)
+	}
 	defer watcher.Close()
 
 	// starting at the root of the project, walk each file/directory searching for
@@ -40,6 +43,7 @@ func main() {
 	watchDirectories := strings.Split(cyclops, ",")
 
 	for _, watchDirectory := range watchDirectories {
+		log.Info("Cyclops look at path ", watchDirectory)
 		// Add a path.
 		err := watcher.Add(watchDirectory)
 		if err != nil {
