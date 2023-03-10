@@ -58,7 +58,7 @@ func main() {
 					log.Info("channel closed")
 					return
 				}
-				log.Error("error:", err)
+				log.Fatal("error:", err)
 			}
 		}
 	}()
