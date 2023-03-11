@@ -1,6 +1,6 @@
 FROM golang:1.20-alpine
 
-RUN apk update && apk add git
+RUN apk update && apk add git && apk add inotify-tools
 
 ENV CGO_ENABLED=0
 ENV GO111MODULE=on
