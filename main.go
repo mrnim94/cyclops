@@ -49,7 +49,7 @@ func main() {
 					log.Info("channel closed")
 					return
 				} else {
-					log.Info("modified file:", event.Name)
+					log.Info("action:", event.Op.String(), " --> ", event.Name)
 				}
 			case err, ok := <-watcher.Errors:
 				if !ok {
