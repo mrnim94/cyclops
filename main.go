@@ -48,17 +48,16 @@ func main() {
 				if !ok {
 					log.Info("channel closed")
 					return
-				}
-				log.Info("event:", event)
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					log.Info("modified file:", event.Name)
+				} else {
+					log.Info("action:", event.Op.String(), " --> ", event.Name)
 				}
 			case err, ok := <-watcher.Errors:
 				if !ok {
 					log.Info("channel closed")
 					return
+				} else {
+					log.Fatal("error:", err)
 				}
-				log.Fatal("error:", err)
 			}
 		}
 	}()
