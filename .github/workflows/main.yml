@@ -41,12 +41,6 @@ jobs:
       - name: Docker Push
         run: |
           docker push ${{ matrix.tag }}
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ matrix.tag }}
-          format: 'table'
-          exit-code: '0'
 #jobs:
 #  sonarqube:
 #    runs-on: ubuntu-latest
