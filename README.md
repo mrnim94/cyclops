@@ -30,7 +30,7 @@ spec:
             claimName: pvc-file-service-smb-1
       containers:
         - name: cyclops
-          image: mrnim94/cyclops:1.0.0-windows-ltsc2019-amd64
+          image: mrnim94/cyclops:1.0.4-windows-ltsc2019-amd64
           env:
             - name: LOOK_PATH
               value: /app/downloaded
@@ -69,7 +69,7 @@ spec:
             claimName: pvc-file-service-smb-1
       containers:
         - name: cyclops
-          image: mrnim94/cyclops:1.0.0
+          image: mrnim94/cyclops:1.0.4
           env:
             - name: LOOK_PATH
               value: /app/downloaded

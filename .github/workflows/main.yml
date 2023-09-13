@@ -2,6 +2,9 @@ name: CI Workflow
 #https://www.phillipsj.net/posts/building-windows-and-linux-containers-with-github-actions/
 
 on:
+  push:
+    branches:
+      - "master"
   release:
     types:
       - published
@@ -41,6 +44,12 @@ jobs:
       - name: Docker Push
         run: |
           docker push ${{ matrix.tag }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ matrix.tag }}
+          format: 'table'
+          exit-code: '0'
 #jobs:
 #  sonarqube:
 #    runs-on: ubuntu-latest
