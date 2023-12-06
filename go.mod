@@ -3,7 +3,7 @@ module cyclops
 go 1.21
 
 require (
-	github.com/fsnotify/fsnotify v1.6.0
+	github.com/fsnotify/fsnotify v1.7.0
 	github.com/labstack/echo/v4 v4.11.1
 	github.com/labstack/gommon v0.4.1
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
