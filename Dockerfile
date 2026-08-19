@@ -1,4 +1,4 @@
-FROM golang:1.22
+FROM golang:1.27
 
 RUN apt-get update -y && apt install git inotify-tools -y
 
