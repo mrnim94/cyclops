@@ -1,6 +1,6 @@
 module cyclops
 
-go 1.21
+go 1.23
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0
@@ -8,7 +8,7 @@ require (
 	github.com/labstack/gommon v0.4.2
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
-	github.com/sirupsen/logrus v1.9.3
+	github.com/sirupsen/logrus v1.10.2
 )
 
 require (
